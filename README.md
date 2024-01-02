@@ -25,6 +25,9 @@
   Enter the required information in the terminal to generated a logo. Once the logo is generated, then open the 'logo.svg' file in your browser.
   ![Running in Terminal](./images/node%20commands.png)
 
+  [Link to Demo](https://drive.google.com/file/d/1cZN5TI3z9v_2ePsxh7MXGQyzAsqLMtZl/view)
+
+
 
   ## License
   ![Static Badge](https://img.shields.io/badge/license-mit-green)
