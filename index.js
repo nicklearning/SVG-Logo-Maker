@@ -1,4 +1,7 @@
 const inquirer = require('inquirer');
+const { Shape, Circle, Triangle, Square } = require('./lib/shapes');
+const fs = require('fs');
+const { error } = require('console');
 
 // List of predefined colors
 const predefinedColors = ['red', 'green', 'blue', 'yellow', 'purple', 'white', 'black'];
@@ -8,10 +11,10 @@ const promptQuestions = [
     {
 
         type: 'input',
-        name: 'textLengthInput',
+        name: 'text',
         message: 'Please enter up to three characters:',
-        validate: textLengthInput => {
-            const trimmedInput = textLengthInput.trim(); // Remove leading and trailing spaces
+        validate: text => {
+            const trimmedInput = text.trim(); // Remove leading and trailing spaces
             if (trimmedInput.length === 0) {
                 return 'Please enter at least one character.';
             }
@@ -23,12 +26,12 @@ const promptQuestions = [
     },
     {
         type: 'input',
-        name: 'colorInput',
+        name: 'textColor',
         message: 'Please enter a text color for your logo. You may enter a standard color or a hexadecimal number color.',
-        validate: colorInput => {
+        validate: textColor => {
             // Regular expression to match a hexadecimal color code
             const hexColorRegex = /^#([0-9a-fA-F]{3}){1,2}$/;
-            const lowerCaseInput = colorInput.toLowerCase();
+            const lowerCaseInput = textColor.toLowerCase();
 
             if (hexColorRegex.test(lowerCaseInput)) {
                 return true;
@@ -41,18 +44,18 @@ const promptQuestions = [
     },
     {
         type: 'list',
-        name: 'shapeInput',
+        name: 'shapeType',
         message: 'Please select a shape color for your logo.',
         choices: ['circle', 'triangle', 'square'],
     },
     {
         type: 'input',
-        name: 'shapeColorInput',
+        name: 'shapeColor',
         message: 'Please enter a shape color for your logo. You may enter a standard color or a hexadecimal number color.',
-        validate: shapeColorInput => {
+        validate: shapeColor => {
             // Regular expression to match a hexadecimal color code
             const hexColorRegex = /^#([0-9a-fA-F]{3}){1,2}$/;
-            const lowerCaseInput = shapeColorInput.toLowerCase();
+            const lowerCaseInput = shapeColor.toLowerCase();
 
             if (hexColorRegex.test(lowerCaseInput)) {
                 return true;
@@ -68,9 +71,38 @@ const promptQuestions = [
 inquirer.prompt(promptQuestions)
     // successful Promise will return data to the .then method
     .then(answers => {
-        console.log('User Responses: ', answers);
+        //console.log('User Responses: ', answers);
+        const { text, textColor, shapeType, shapeColor } = answers;
+        let shape;
+
+        switch (shapeType.toLowerCase()) {
+            case 'circle':
+                shape = new Circle(shapeColor, textColor, text);
+                break;
+            case 'triangle':
+                shape = new Triangle(shapeColor, textColor, text);
+                break;
+            case 'square':
+                shape = new Square(shapeColor, textColor, text);
+                break;
+            default:
+                throw new Error('Shape type is unsupported')
+        }
+
+        const svgContent = shape.render();
+        const fileName = 'logo.svg'
+
+        fs.writeFile(fileName, svgContent, (err) => {
+            if (err) {
+                console.error('Error creating SVG file:', err);
+            } else {
+                console.log("Generated logo.svg");
+            }
+        });
     })
     // unsuccessful Promise will return data to the .catch method
     .catch(err => {
         console.error('Error during prompt:', err)
     })
+
+
