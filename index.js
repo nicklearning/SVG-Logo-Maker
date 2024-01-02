@@ -13,7 +13,7 @@ const promptQuestions = [
         type: 'input',
         name: 'text',
         message: 'Please enter up to three characters:',
-        validate: text => {
+        validate: text => { // method is triggered during runtime
             const trimmedInput = text.trim(); // Remove leading and trailing spaces
             if (trimmedInput.length === 0) {
                 return 'Please enter at least one character.';
@@ -27,7 +27,7 @@ const promptQuestions = [
     {
         type: 'input',
         name: 'textColor',
-        message: 'Please enter a text color for your logo. You may enter a standard color or a hexadecimal number color.',
+        message: 'Please enter a color from the list: red, green, blue, yellow, purple, white, black. Or, enter a hexadecimal color number for your logo\'s text.',
         validate: textColor => {
             // Regular expression to match a hexadecimal color code
             const hexColorRegex = /^#([0-9a-fA-F]{3}){1,2}$/;
@@ -51,7 +51,7 @@ const promptQuestions = [
     {
         type: 'input',
         name: 'shapeColor',
-        message: 'Please enter a shape color for your logo. You may enter a standard color or a hexadecimal number color.',
+        message: 'Please enter a color from the list: red, green, blue, yellow, purple, white, black. Or, enter a hexadecimal color number for your logo\'s background color.',
         validate: shapeColor => {
             // Regular expression to match a hexadecimal color code
             const hexColorRegex = /^#([0-9a-fA-F]{3}){1,2}$/;
@@ -72,7 +72,7 @@ inquirer.prompt(promptQuestions)
     // successful Promise will return data to the .then method
     .then(answers => {
         //console.log('User Responses: ', answers);
-        const { text, textColor, shapeType, shapeColor } = answers;
+        const { text, textColor, shapeType, shapeColor } = answers; //deconstruct the array of answers
         let shape;
 
         switch (shapeType.toLowerCase()) {
